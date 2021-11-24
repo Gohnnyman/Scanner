@@ -12,10 +12,10 @@ public:
 
 
     explicit Scanner(const QString& deviceModel, QObject *parent = nullptr);
-    void activateScanner();
-    void deactivateScanner();
-    void startCameraScanner();
-    bool isExternalScanner();
+    Q_INVOKABLE void activateScanner();
+    Q_INVOKABLE void deactivateScanner();
+    Q_INVOKABLE void startCameraScanner();
+    Q_INVOKABLE bool isExternalScanner();
     ~Scanner();
 
 

@@ -14,8 +14,10 @@ ApplicationWindow {
 
         Page1Form {
             Button {
-                action: {
+                text: "POPA";
+                onClicked: {
                     console.log("meme");
+                    Scanner.startCameraScanner();
                 }
 
             }

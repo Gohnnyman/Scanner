@@ -1,4 +1,4 @@
-package org.qtproject.Java;
+package org.qtproject.Scanner;
 
 import org.qtproject.qt5.android.QtNative;
 

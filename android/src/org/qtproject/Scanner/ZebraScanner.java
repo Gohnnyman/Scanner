@@ -1,4 +1,4 @@
-package org.qtproject.Java;
+package org.qtproject.Scanner;
 
 import org.qtproject.qt5.android.QtNative;
 
@@ -45,7 +45,7 @@ import java.util.*;
 import android.util.Log;
 
 
-public class ZebraScanner /*extends Activity */implements EMDKListener, DataListener, StatusListener, ScannerConnectionListener {
+public class ZebraScanner implements EMDKListener, DataListener, StatusListener, ScannerConnectionListener {
 
     public static native void sendScanResult(String scanData, String scanDataType);
     public static native void log(String message);
@@ -60,7 +60,6 @@ public class ZebraScanner /*extends Activity */implements EMDKListener, DataList
     private final Object lock = new Object();
 
     public void init() {
-//        log("------------------------------------- init ------------------------------------------");
         deviceList = new ArrayList<ScannerInfo>();
         EMDKResults results = EMDKManager.getEMDKManager(QtNative.activity().getApplicationContext(), this);
         if (results.statusCode != EMDKResults.STATUS_CODE.SUCCESS) {
@@ -71,7 +70,6 @@ public class ZebraScanner /*extends Activity */implements EMDKListener, DataList
 
     @Override
     public void onOpened(EMDKManager emdkManager) {
-//        log("------------------------------------- onOpened ------------------------------------------");
         this.emdkManager = emdkManager;
         initBarcodeManager();
         enumerateScannerDevices();
@@ -79,12 +77,11 @@ public class ZebraScanner /*extends Activity */implements EMDKListener, DataList
 
     @Override
     public void onClosed() {
-//        log("------------------------------------- onClosed ------------------------------------------");
+
     }
 
     @Override
     public void onData(ScanDataCollection scanDataCollection) {
-        logInfo("------------------------------------- onData ------------------------------------------");
         if ((scanDataCollection != null) && (scanDataCollection.getResult() == ScannerResults.SUCCESS)) {
             ArrayList <ScanData> scanData = scanDataCollection.getScanData();
             for(ScanData data: scanData) {
@@ -98,19 +95,14 @@ public class ZebraScanner /*extends Activity */implements EMDKListener, DataList
 
     @Override
     public void onStatus(StatusData statusData) {
-//        log("------------------------------------- onStatus ------------------------------------------");
         ScannerStates state = statusData.getState();
         String statusString;
         switch(state) {
             case IDLE:
-                statusString = statusData.getFriendlyName()+" is enabled and idle...";
-//                log(statusString);
-                // set trigger type
-//                    scanner.triggerType = TriggerType.SOFT_ONCE;
+                statusString = statusData.getFriendlyName() + " is enabled and idle...";
+
                 scanner.triggerType = TriggerType.HARD;
-                // set decoders
-                setDecoders(); // todo move into init scanner
-                // submit read
+                setDecoders();
                 if(!scanner.isReadPending()) {
                     try {
                         scanner.read();
@@ -121,15 +113,12 @@ public class ZebraScanner /*extends Activity */implements EMDKListener, DataList
                 break;
             case WAITING:
                 statusString = "Scanner is waiting for trigger press...";
-//                log(statusString);
                 break;
             case SCANNING:
                 statusString = "Scanning...";
-//                log(statusString);
                 break;
             case DISABLED:
-                statusString = statusData.getFriendlyName()+" is disabled.";
-//                log(statusString);
+                statusString = statusData.getFriendlyName() + " is disabled.";
                 break;
             case ERROR:
                 statusString = "An error has occurred.";
@@ -142,7 +131,6 @@ public class ZebraScanner /*extends Activity */implements EMDKListener, DataList
 
     @Override
     public void onConnectionChange(ScannerInfo scannerInfo, ConnectionState connectionState) {
-//        log("------------------------------------- onConnectionChange ------------------------------------------");
         switch(connectionState) {
         case CONNECTED:
             synchronized (lock) {
@@ -158,7 +146,6 @@ public class ZebraScanner /*extends Activity */implements EMDKListener, DataList
     }
 
     public void initScanner() {
-//        log("------------------------------------- initScanner ------------------------------------------");
         if (scanner == null) {
             if ((deviceList != null) && (deviceList.size() != 0)) {
                 if (barcodeManager != null)
@@ -173,7 +160,6 @@ public class ZebraScanner /*extends Activity */implements EMDKListener, DataList
                 scanner.addStatusListener(this);
                 try {
                     scanner.enable();
-//                    log("------ scanner enabled -----------");
                 } catch (ScannerException e) {
                     logError(e.getMessage());
                     deInitScanner();
@@ -228,7 +214,6 @@ public class ZebraScanner /*extends Activity */implements EMDKListener, DataList
     }
 
     private void setDecoders() {
-//        log("------------------------------------- setDecoders ------------------------------------------");
         if (scanner != null) {
             try {
                 ScannerConfig config = scanner.getConfig();
@@ -250,16 +235,13 @@ public class ZebraScanner /*extends Activity */implements EMDKListener, DataList
     }
 
     private void initBarcodeManager() {
-//        log("------------------------------------- initBarcodeManager ------------------------------------------");
         barcodeManager = (BarcodeManager) emdkManager.getInstance(FEATURE_TYPE.BARCODE);
-        // Add connection listener
         if (barcodeManager != null) {
             barcodeManager.addConnectionListener(this);
         }
     }
 
     private void enumerateScannerDevices() {
-//        log("------------------------------------- enumerateScannerDevices ------------------------------------------");
         if (barcodeManager != null) {
             List<String> friendlyNameList = new ArrayList<String>();
             int spinnerIndex = 0;
@@ -281,26 +263,14 @@ public class ZebraScanner /*extends Activity */implements EMDKListener, DataList
                                      ", connectionType: " + String.valueOf(connectionType) +
                                      ", decoderType: " + String.valueOf(decoderType) +
                                      ", deviceIdentifier: " + String.valueOf(deviceIdentifier);
-//                    log(message);
+
                     if (scnInfo.getDeviceIdentifier() == BarcodeManager.DeviceIdentifier.INTERNAL_IMAGER1) {
                         scannerIndex = spinnerIndex;
-//                        log("-------->" + String.valueOf(spinnerIndex));
                         deInitScanner();
                         initScanner();
                     }
                     ++spinnerIndex;
                 }
-            /*
-            V         : Log Java: name: Camera Scanner, deviceType: 0, connectionType: 0, decoderType: 1, deviceIdentifier: 1
-            V         : Log Java: name: 2D Barcode Imager, deviceType: 1, connectionType: 0, decoderType: 1, deviceIdentifier: 2
-            V         : Log Java: -------->1
-            V         : Log Java: name: Bluetooth Scanner, deviceType: 1, connectionType: 1, decoderType: 1, deviceIdentifier: 4
-            V         : Log Java: name: RS6000 Bluetooth Scanner, deviceType: 1, connectionType: 1, decoderType: 1, deviceIdentifier: 6
-            V         : Log Java: name: DS3678 Bluetooth Scanner, deviceType: 1, connectionType: 1, decoderType: 1, deviceIdentifier: 8
-            V         : Log Java: name: LI3678 Bluetooth Scanner, deviceType: 2, connectionType: 1, decoderType: 0, deviceIdentifier: 10
-            V         : Log Java: name: DS2278 Bluetooth Scanner, deviceType: 1, connectionType: 1, decoderType: 1, deviceIdentifier: 12
-            V         : Log Java: name: DS8178 Bluetooth Scanner, deviceType: 1, connectionType: 0, decoderType: 1, deviceIdentifier: 13
-            */
 
             }
             else {
@@ -310,7 +280,6 @@ public class ZebraScanner /*extends Activity */implements EMDKListener, DataList
     }
 
     public void deInitScanner() {
-//        log("------------------------------------- deInitScanner ------------------------------------------");
         if (scanner != null) {
             try {
                 scanner.disable();
@@ -335,12 +304,10 @@ public class ZebraScanner /*extends Activity */implements EMDKListener, DataList
     }
 
     private static void logInfo(final String status) {
-//        Log.v(null, "Log Java: " + status);
         log("Log Java: " + status);
     }
 
     private static void logError(final String status) {
-//        Log.v(null, "!!!!!!!! Error Java: " + status);
         log("!!!!!!!! Error Java: " + status);
     }
 }

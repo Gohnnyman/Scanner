@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
 
     Scanner scanner("");
+    scanner.activateScanner();
     engine.rootContext()->setContextProperty("Scanner", &scanner);
 
     AndroidConnector android;
