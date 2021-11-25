@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include "androidconnector.h"
+#include "translator.h"
 
 
 int main(int argc, char *argv[])
@@ -21,6 +22,8 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
 
     AndroidConnector android;
+    Translator translator;
+    engine.rootContext()->setContextProperty("Translator", &translator);
     engine.rootContext()->setContextProperty("Android", &android);
 
     engine.load(url);

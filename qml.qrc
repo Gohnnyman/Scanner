@@ -4,5 +4,7 @@
         <file>Page1Form.qml</file>
         <file>Page2Form.qml</file>
         <file>qtquickcontrols2.conf</file>
+        <file>translation/lang_ru.ts</file>
+	   <file>translation/lang_ru.qm</file>
     </qresource>
 </RCC>
