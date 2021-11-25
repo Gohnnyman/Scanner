@@ -40,7 +40,9 @@ SOURCES += \
 
 RESOURCES += qml.qrc
 
-TRANSLATIONS += translation/lang_ru.ts
+TRANSLATIONS += \
+    translation/lang_ru.ts \
+    translation/lang_ua.ts
 
 
 

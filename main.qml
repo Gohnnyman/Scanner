@@ -21,6 +21,17 @@ ApplicationWindow {
         }
     }
 
+    Connections {
+        target: Android
+        function onScanDataChanged() {
+            updateText();
+        }
+
+        function onScanDataTypeChanged() {
+            updateText();
+        }
+    }
+
     Component.onCompleted: updateText();
 
     SwipeView {
@@ -28,25 +39,13 @@ ApplicationWindow {
         anchors.fill: parent
         currentIndex: tabBar.currentIndex
 
-        Page1Form {
+        ScannerTest {
             id: firstSwap
         }
 
-        Page2Form {
+        Info {
             id: secondSwap
         }
-    }
-
-    Button {
-        text: "CLICK"
-        onClicked: {
-            Translator.updateLanguage("ru");
-        }
-    }
-
-    Text {
-        id: jopa
-        text: Translator.emptyString;
     }
 
 

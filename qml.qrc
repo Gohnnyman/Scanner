@@ -1,10 +1,13 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>Page1Form.qml</file>
-        <file>Page2Form.qml</file>
+        <file>ScannerTest.qml</file>
+        <file>Info.qml</file>
         <file>qtquickcontrols2.conf</file>
         <file>translation/lang_ru.ts</file>
-	   <file>translation/lang_ru.qm</file>
+        <file>translation/lang_ru.qm</file>
+        <file>translation/lang_ua.qm</file>
+        <file>translation/lang_ua.ts</file>
+        <file>img/photo_2021-09-21_00-12-11.jpg</file>
     </qresource>
 </RCC>

@@ -21,8 +21,8 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
 
-    AndroidConnector android;
     Translator translator;
+    AndroidConnector android;
     engine.rootContext()->setContextProperty("Translator", &translator);
     engine.rootContext()->setContextProperty("Android", &android);
 

@@ -8,21 +8,14 @@
 class Translator : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString emptyString READ getEmptyString NOTIFY languageChanged)
 public:
-    Translator() {};
-    QString getEmptyString() { return ""; }
-
+    Translator();
 
 signals:
     void languageChanged();
 
 public slots:
-    void updateLanguage(const QString& lang) {
-        mTranslator.load("lang_" + lang, ":/translation");
-        qApp->installTranslator(&mTranslator);
-        emit languageChanged();
-    }
+    void updateLanguage(const QString& lang);
 
 private:
     QTranslator mTranslator;

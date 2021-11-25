@@ -26,7 +26,7 @@ public:
     AndroidConnector();
     QString getDeviceModel() const;
     QString getSerial() const;
-    void toastMessage(const QString&) const;
+    Q_INVOKABLE void toastMessage(const QString&) const;
 
 
 

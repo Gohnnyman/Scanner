@@ -4,9 +4,9 @@ import QtQuick.Layouts 1.3
 
 Page {
     property var updateText: function(){
-        label.text = qsTr("Page 1");
-        lastDataType.text = qsTr("<b>Last Data type: </b>") + (!!Android.scanDataType ? Android.scanDataType : "-")
-        lastData.text = qsTr("<b>Last Data: </b>") + (!!Android.scanData ? Android.scanData : "-");
+        label.text = qsTr("Scanner Test");
+        lastDataType.text = qsTr("<b>Last Data type: </b>") + ((!!Android.scanDataType) ? Android.scanDataType : "-")
+        lastData.text = qsTr("<b>Last Data: </b>") + ((!!Android.scanData) ? Android.scanData : "-");
         cameraScannerBut.text = qsTr("Camera Scanner");
     }
 
@@ -16,6 +16,7 @@ Page {
         font.pixelSize: Qt.application.font.pixelSize * 2
         padding: 10
     }
+
 
 
     ColumnLayout {
