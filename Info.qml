@@ -18,37 +18,40 @@ Page {
         padding: 10
     }
 
-    Text {
-        anchors.left: parent.left
-        anchors.right: parent.right;
-        anchors.margins: 8
-        id: info
-        color: "white"
-        clip: true
-        font.pixelSize: 21;
-        wrapMode: TextInput.Wrap
-    }
-
-    Image {
-        anchors.top: info.bottom
-        anchors.margins: 10
-        anchors.horizontalCenter: parent.horizontalCenter
-        id: pizzaCat
-        sourceSize {
-            width: parent.width / 2;
-            height: parent.height / 3
+    Flickable {
+        anchors.fill: parent
+        contentHeight: info.implicitHeight + pizzaCat.implicitHeight + parent.height / 5
+        Text {
+            anchors.left: parent.left
+            anchors.right: parent.right;
+            anchors.margins: 8
+            id: info
+            color: "white"
+            clip: true
+            font.pixelSize: Qt.application.font.pixelSize * 1.5;
+            wrapMode: TextInput.Wrap
         }
-        source: "img/pizzaCat.jpg"
+
+        Image {
+            anchors.top: info.bottom
+            anchors.margins: 10
+            anchors.horizontalCenter: parent.horizontalCenter
+            id: pizzaCat
+            sourceSize {
+                width: parent.width / 2;
+                height: parent.height / 3
+            }
+            source: "img/pizzaCat.jpg"
+        }
 
     }
-
 
     ComboBox {
         id: cmbbox
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        width: parent.width / 3
-        model: ["us", "ua", "ru"]
+        width: parent.width / 2.5
+        model: ["ua", "us", "ru"]
         displayText: qsTr("Language: ") + currentText;
         onActivated: {
             Translator.updateLanguage(currentValue);

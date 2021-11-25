@@ -64,6 +64,7 @@ class HoneywellScannerListener implements BarcodeReader.BarcodeListener {
                 scanDataType = "PDF417";
                 break;
         }
+        Log.w(TAG, scanData);
         HoneywellScanner.sendScanResult(scanData, scanDataType);
     }
 
@@ -85,6 +86,7 @@ public class HoneywellScanner {
 
 
     public void init() {
+
         context = QtNative.activity().getApplicationContext();
 
         AidcManager.create(context, new AidcManager.CreatedCallback() {
@@ -93,6 +95,7 @@ public class HoneywellScanner {
             public void onCreated(AidcManager aidcManager) {
 
             try {
+                Log.i(TAG, "MEME");
                 manager = aidcManager;
                 reader = manager.createBarcodeReader();
 
@@ -103,6 +106,7 @@ public class HoneywellScanner {
                 reader.setProperty(BarcodeReader.PROPERTY_EAN_8_CHECK_DIGIT_TRANSMIT_ENABLED, true);
                 reader.setProperty(BarcodeReader.PROPERTY_UPC_A_CHECK_DIGIT_TRANSMIT_ENABLED, true);
                 reader.setProperty(BarcodeReader.PROPERTY_UPC_E_CHECK_DIGIT_TRANSMIT_ENABLED, true);
+                Log.i(TAG, "INIT");
 
 
             } catch (AidcException e) {

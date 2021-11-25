@@ -31,7 +31,7 @@ Page {
             id: lastDataType
             color: "white"
             clip: true
-            font.pixelSize: 21;
+            font.pixelSize: Qt.application.font.pixelSize * 1.5;
             wrapMode: TextInput.Wrap
         }
 
@@ -42,7 +42,7 @@ Page {
             id: lastData
             color: "white"
             clip: true
-            font.pixelSize: 21;
+            font.pixelSize: Qt.application.font.pixelSize * 1.5;
             wrapMode: TextInput.Wrap
         }
     }
