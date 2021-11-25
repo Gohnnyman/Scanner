@@ -14,16 +14,25 @@ ApplicationWindow {
 
         Page1Form {
             Button {
-                text: "POPA";
+                text: "Camera Scanner";
+                anchors.bottom: parent.bottom;
+                anchors.left: parent.left;
+                anchors.right: parent.right;
                 onClicked: {
-                    console.log("meme");
-                    Scanner.startCameraScanner();
+                    Android.startCameraScanner();
                 }
 
             }
         }
 
         Page2Form {
+            Text {
+                id: scanned
+                color: "white"
+                clip: true
+                wrapMode: TextInput.Wrap
+                text: "Made by Alexander Fedorovskyi"
+            }
         }
     }
 
@@ -32,10 +41,10 @@ ApplicationWindow {
         currentIndex: swipeView.currentIndex
 
         TabButton {
-            text: qsTr("Page 1")
+            text: qsTr("Scanner Test")
         }
         TabButton {
-            text: qsTr("Page 2")
+            text: qsTr("Info")
         }
     }
 }

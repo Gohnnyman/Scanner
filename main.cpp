@@ -1,7 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include "scanner.h"
 #include "androidconnector.h"
 
 
@@ -21,12 +20,9 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
 
-    Scanner scanner("");
-    scanner.activateScanner();
-    engine.rootContext()->setContextProperty("Scanner", &scanner);
-
     AndroidConnector android;
-    qDebug() << "MEME: " << scanner.isExternalScanner() << ' ' << android.getDeviceModel();
+    engine.rootContext()->setContextProperty("Android", &android);
+
     engine.load(url);
     return app.exec();
 }

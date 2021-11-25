@@ -8,12 +8,25 @@ import android.content.Context;
 import java.lang.String;
 import android.widget.Toast;
 import android.app.Activity;
+import android.Manifest;
+import androidx.core.content.ContextCompat;
+import androidx.core.app.ActivityCompat;
+import android.content.pm.PackageManager;
 
 
 
 
-public class Android {
-    private static final String TAG = "Android";
+public class AndroidConnector {
+    private static final String TAG = "AndroidConnector";
+
+    public static void chackPermissions()
+    {
+        if (ContextCompat.checkSelfPermission(
+                 QtNative.activity().getApplicationContext(), Manifest.permission.CAMERA) ==
+                PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(QtNative.activity(), new String[] {Manifest.permission.CAMERA}, 0);
+        }
+    }
 
     public static String getSerial() {
         try {
