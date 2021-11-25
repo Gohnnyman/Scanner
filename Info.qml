@@ -29,6 +29,19 @@ Page {
         wrapMode: TextInput.Wrap
     }
 
+    Image {
+        anchors.top: info.bottom
+        anchors.margins: 10
+        anchors.horizontalCenter: parent.horizontalCenter
+        id: pizzaCat
+        sourceSize {
+            width: parent.width / 2;
+            height: parent.height / 3
+        }
+        source: "img/pizzaCat.jpg"
+
+    }
+
 
     ComboBox {
         id: cmbbox
