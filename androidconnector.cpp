@@ -7,6 +7,7 @@ AndroidConnector::AndroidConnector()
                            ("org/qtproject/Scanner/AndroidConnector", "chackPermissions", "()V" );
     scanner = new Scanner(getDeviceModel());
     connect(scanner, SIGNAL(onScanComplete(QByteArray, QByteArray)), this, SLOT(slotScanComplete(QByteArray, QByteArray)));
+    scanner->activateScanner();
 }
 
 QString AndroidConnector::getDeviceModel() const
@@ -31,7 +32,6 @@ void AndroidConnector::toastMessage(const QString& text) const
     QAndroidJniObject string = QAndroidJniObject::fromString(text);
     QAndroidJniObject::callStaticMethod<void>
                            ("org/qtproject/Scanner/AndroidConnector", "toastMessage", "(Ljava/lang/String;)V", string.object<jstring>());
-
 }
 
 void AndroidConnector::activateScanner()
@@ -56,7 +56,6 @@ bool AndroidConnector::isExternalScanner()
 
 void AndroidConnector::slotScanComplete(QByteArray scanData, QByteArray scanDataType)
 {
-    qDebug() << "MEME";
     setScanData(scanData);
     setScanDataType(scanDataType);
 }

@@ -4,7 +4,6 @@
 Translator::Translator() : QObject()
 {
     updateLanguage("ua");
-    qDebug() << "updated";
 }
 
 

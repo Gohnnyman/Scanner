@@ -16,7 +16,6 @@ HoneywellScanner::HoneywellScanner(QObject *parent) : ScannerInterface(parent)
 
     javaObject = new QAndroidJniObject("org/qtproject/Scanner/HoneywellScanner");
     javaObject->callObjectMethod("init", "()V");
-
     ScannerConnector::scannerConnectorInit(this);
 }
 

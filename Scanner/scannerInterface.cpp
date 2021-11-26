@@ -18,7 +18,6 @@ namespace ScannerConnector
     void log(JNIEnv *env, jobject obj, jstring message)
     {
         QByteArray qMessage(env->GetStringUTFChars(message, 0));
-        qDebug() << qMessage;
     }
 
 }

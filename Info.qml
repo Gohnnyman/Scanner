@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Controls.Material 2.12
 
 Page {
     property var updateText: function(){
@@ -12,11 +13,22 @@ Page {
         cmbbox.displayText = qsTr("Language: ") + cmbbox.currentText;
     }
 
-    header: Label {
-        id: label
-        font.pixelSize: Qt.application.font.pixelSize * 2
-        padding: 10
+    header: Rectangle {
+        Material.theme: Material.Dark
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: label.implicitHeight
+        color: Material.backgroundColor
+
+        Label {
+            Material.theme: Material.Dark
+            id: label
+            background: Qt.AutoColor
+            font.pixelSize: Qt.application.font.pixelSize * 2
+            padding: 10
+        }
     }
+
 
     Flickable {
         anchors.fill: parent

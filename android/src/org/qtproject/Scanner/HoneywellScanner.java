@@ -95,7 +95,6 @@ public class HoneywellScanner {
             public void onCreated(AidcManager aidcManager) {
 
             try {
-                Log.i(TAG, "MEME");
                 manager = aidcManager;
                 reader = manager.createBarcodeReader();
 
@@ -106,7 +105,7 @@ public class HoneywellScanner {
                 reader.setProperty(BarcodeReader.PROPERTY_EAN_8_CHECK_DIGIT_TRANSMIT_ENABLED, true);
                 reader.setProperty(BarcodeReader.PROPERTY_UPC_A_CHECK_DIGIT_TRANSMIT_ENABLED, true);
                 reader.setProperty(BarcodeReader.PROPERTY_UPC_E_CHECK_DIGIT_TRANSMIT_ENABLED, true);
-                Log.i(TAG, "INIT");
+                activateScanner();
 
 
             } catch (AidcException e) {
@@ -121,10 +120,13 @@ public class HoneywellScanner {
     public void activateScanner() {
         if (reader != null) {
             try {
+                Log.e(TAG, "Scanner activatie");
                 reader.claim();
             } catch (AidcException e) {
                 Log.e(TAG, "Scanner activation error");
             }
+        } else {
+            Log.i(TAG, "READER is NULL");
         }
         Log.w(TAG, "Scanner claimed");
     }
