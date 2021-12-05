@@ -1,0 +1,34 @@
+@startuml UseCaseDiagram
+
+
+usecase swipeLeft as "Swipe to Scanner test window"
+usecase swipeRight as "Swipe to Info window"
+usecase pressScan as "Press Scan button"
+usecase scanExternal as "Scan data with external scanner"
+
+
+usecase scanData as "Scan data"
+usecase exitScanner as "Exit Scanner"
+usecase flashOn as "Turn flash on"
+usecase scannerActivity as "Work with camera scanner"
+
+usecase changeLanguage as "Change language"
+
+scanData -up-|> scannerActivity: <<extends>>
+flashOn -up-|> scannerActivity: <<extends>>
+exitScanner -up-|> scannerActivity: <<extends>>
+pressScan -down-> scannerActivity: <<implements>>
+
+changeLanguage -up-|> swipeLeft: <<extends>>
+
+
+
+
+actor User
+
+User --> scanExternal
+User --> swipeLeft
+User --> swipeRight
+User --> pressScan
+
+@enduml

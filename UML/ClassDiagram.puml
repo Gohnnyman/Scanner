@@ -1,0 +1,253 @@
+
+@startuml ClassDiagram
+title Class Diagram 
+
+namespace cppClasses {
+
+    class AndroidConnector
+    class Scanner
+    class ScannerConnector <namespace>
+    class CameraScanner implements ScannerInterface
+    class HoneywellScanner implements ScannerInterface
+    class ZebraScanner implements ScannerInterface
+    class ChainwayScanner implements ScannerInterface
+    abstract ScannerInterface
+
+
+
+
+
+    Scanner --* AndroidConnector
+    ScannerInterface --* Scanner
+    AndroidConnector -- JavaClasses.AndroidConnector
+    ChainwayScanner -- ScannerConnector
+    ZebraScanner -- ScannerConnector
+    CameraScanner -- ScannerConnector
+    HoneywellScanner -- ScannerConnector
+
+    ScannerConnector -- JavaClasses.ChainwayScanner
+    ScannerConnector -- JavaClasses.ZebraScanner
+    ScannerConnector -- JavaClasses.CameraScanner
+    ScannerConnector -- JavaClasses.HoneywellScanner
+
+
+
+    class AndroidConnector {
+        -QString m_scanData;
+        -QString m_scanDataType;
+        -Scanner* scanner;
+
+        -QString scanData() const;
+        -QString scanDataType() const;
+
+        -void setScanData(const QString&);
+        -void setScanDataType(const QString&);
+
+        +AndroidConnector();
+        +QString getDeviceModel() const;
+        +QString getSerial() const;
+        
+        +void toastMessage(const QString&) const;
+        +void activateScanner();
+        +void deactivateScanner();
+        +void startCameraScanner();
+        +bool isExternalScanner();
+    }
+    note right of AndroidConnector 
+        Provides realization of different 
+        java functions for android
+    end note
+
+    class Scanner {
+        -ScannerInterface* externalScanner;
+        -ScannerInterface* cameraScanner;
+ 
+        +Scanner(const QString& deviceModel, QObject *parent);
+        +~Scanner();
+        
+        +void activateScanner();
+        +void deactivateScanner();
+        +void startCameraScanner();
+        +bool isExternalScanner();
+
+        +void onScanComplete(QByteArray scanData, QByteArray scanDataType);
+    }
+
+    abstract ScannerInterface {
+        #QAndroidJniObject *javaObject;
+
+        +ScannerInterface(QObject *parent = nullptr): QObject(parent) {}
+        +virtual void activateScanner() = 0;
+        +virtual void deactivateScanner() = 0;
+        +virtual ~ScannerInterface();
+
+        void onScanComplete(QByteArray scanData, QByteArray scanDataType);
+    }
+
+    class CameraScanner {
+        -QString decodeScanDataType(QString typeCode);
+        -void scanResultReceiver(int requestCode, int resultCode, const QAndroidJniObject &data);
+        
+        +CameraScanner(QObject *parent = nullptr);
+        +~CameraScanner();
+        +void activateScanner() override;
+        +void deactivateScanner() override;
+
+    }
+
+    class HoneywellScanner {
+        +ZebraScanner(QObject *parent = nullptr);
+        +~ZebraScanner() override;
+        +void activateScanner() override;
+        +void deactivateScanner() override;
+    }
+
+    class ChainwayScanner {
+        +ZebraScanner(QObject *parent = nullptr);
+        +~ZebraScanner() override;
+        +void activateScanner() override;
+        +void deactivateScanner() override;
+    }
+
+    class ZebraScanner {
+        +ZebraScanner(QObject *parent = nullptr);
+        +~ZebraScanner() override;
+        +void activateScanner() override;
+        +void deactivateScanner() override;
+    }
+
+    class ScannerConnector <namespace> {
+        -ScannerInterface *scannerConnector;
+        +void scannerConnectorInit(ScannerInterface *scanner);
+        +void sendScanResult(JNIEnv *env, jobject obj, jstring scanData, jstring scanDataType);
+        +void log(JNIEnv *env, jobject obj, jstring message);
+    }
+    note right of ScannerConnector
+        ScannerConnector not Class but namespace.
+        It's because Java functions can be connected only to 
+        c++ functions, not memeber functions.
+    end note
+
+
+
+}
+
+namespace JavaClasses {
+    class AndroidConnector
+    class ChainwayScanner
+    class HoneywellScanner
+    class HoneywellScannerListener
+    class ZebraScanner
+    class CameraScanner
+
+    HoneywellScanner -down- HoneywellScannerListener
+
+    class AndroidConnector {
+        -static final String TAG = "AndroidConnector"; 
+
+        +static String getDeviceModel();
+        +static void toastMessage(String text);
+        +static String getSerial();
+        +static void chackPermissions();
+    }
+
+    class CameraScanner {
+        -static final String TAG = "CameraScanner";
+
+        +static native void sendScanResult(String scanData, String scanDataType);
+        +static native void log(String message);
+
+        +void startActivityForResult(Intent intent, int requestCode)
+        -void initViews();
+        -void initialiseDetectorsAndSources();
+        -void flashOnButton();
+        -static Camera getCamera( CameraSource cameraSource);
+
+        #void onCreate(Bundle savedInstanceState);
+        #void onPause();
+        #void onResume();
+    }
+
+    class ZebraScanner {
+        -static final String TAG = "ZebraScanner";
+
+        +static native void sendScanResult(String scanData, String scanDataType);
+        +static native void log(String message);
+        
+        +void activateScanner();
+        +void deActivateScanner();
+
+        +void init();
+        +void onOpened(EMDKManager emdkManager);
+
+        +void onData(ScanDataCollection scanDataCollection);
+        +void onStatus(StatusData statusData);
+        +void onConnectionChange(ScannerInfo scannerInfo, ConnectionState connectionState);
+        +void initScanner();
+
+        -void setDecoders();
+        -void initBarcodeManager();
+        -void enumerateScannerDevices();
+        +void deInitScanner();
+
+        #void onClosed();
+    }
+
+    class HoneywellScannerListener {
+        -static final String TAG = "HoneywellScannerListener";
+    
+        +void onBarcodeEvent(final BarcodeReadEvent event);
+    }
+
+    class HoneywellScanner {
+        -static final String TAG = "HoneywellScanner";
+        -Context context;
+        -AidcManager manager;
+        -BarcodeReader reader;
+        
+        +void init();
+        +void activateScanner();
+        void deActivateScanner();
+    }
+
+    class ChainwayScanner {
+        -static final String TAG = "ChainwayScanner";
+        -Context context;
+        
+        +void init();
+        +void activateScanner();
+        void deActivateScanner();
+    }
+
+}
+
+namespace qmlClasses {
+    class Info
+    class Main
+    class ScannerTest
+
+    Main *-- Info
+    Main *-- ScannerTest
+
+    cppClasses.AndroidConnector -- Main
+
+
+    class Main {
+        +ScannerTest;
+        +ScannerTest;
+
+        +updateText();
+    }
+
+    class Info {
+        +header;
+        +updateText();
+    }
+
+    class ScannerTest {
+        +header;
+        +updateText();
+    }
+}
+
+@enduml

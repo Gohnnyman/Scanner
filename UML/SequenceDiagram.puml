@@ -1,0 +1,51 @@
+    
+@startuml SequenceDiagram
+
+actor User
+participant "Main interface" as interface
+participant "Class AndroidConnector" as androidConnector
+participant "Class Scanner" as scanner
+participant "Class ScannerInterface" as ScannerInterface
+participant "Java Scanner" as javaScanner
+
+
+group Test Scanner
+    User -> interface: Clicked "Test Scanner" button
+    interface -> AndroidConnector: Start Camera Scanner
+    AndroidConnector -> ScannerInterface: Start Camera Scanner
+    ScannerInterface -> javaScanner: Start Camera Scanner
+    ScannerInterface <-- javaScanner: Open scan window
+    AndroidConnector <-- ScannerInterface: Open scan window
+    interface <-- AndroidConnector: Open scan window
+    User <-- interface: Show scan window
+end
+
+group Swipe right
+    User -> interface: Swap to the Info page
+    interface --> User: Show Info page
+end
+
+group Swipe left
+    User -> interface: Swap to the Test Scanner page
+    interface --> User: Show Test Scanner page
+end
+
+group Change Language
+    User -> interface: Change Language
+    interface -> AndroidConnector: Change Language
+    interface <-- AndroidConnector: Update window
+    User <-- interface: Showing updated window
+end
+
+group Scan with External Scanner
+    User -> javaScanner: Scan Data
+    javaScanner -> ScannerInterface: data
+    ScannerInterface -> scanner: data
+    scanner -> AndroidConnector: data
+    AndroidConnector -> interface: update data
+    interface -> User: show new data
+end
+
+
+@enduml
+
